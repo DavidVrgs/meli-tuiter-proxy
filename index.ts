@@ -77,24 +77,23 @@ app.post("/api/users", async (req: Request, res: Response) => {
 
 app.get("/api/me/feed", async (req: Request, res: Response) => {
   const { authorization } = req.headers;
+  const { page, only_parents } = req.query;
 
   try {
-    const response = await fetch(`${process.env.API_URL}/me/feed`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: authorization ?? "",
-        "Application-Token": `${process.env.API_SECRET_TOKEN}`,
-      },
-    });
-
-    console.log(response);
+    const response = await fetch(
+      `${process.env.API_URL}/me/feed?page=${page}&only_parents=${only_parents}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authorization ?? "",
+          "Application-Token": `${process.env.API_SECRET_TOKEN}`,
+        },
+      }
+    );
 
     const data = await response.json();
-    console.log(data);
     res.status(response.status).send(data);
-  } catch (error) {
-    console.log(error);
-
+  } catch {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
