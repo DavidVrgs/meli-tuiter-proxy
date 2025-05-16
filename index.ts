@@ -15,7 +15,7 @@ app.use(express.json());
 app.post("/api/login", async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const response = await fetch(`${process.env.API_URL}/login`, {
+    const response = await fetch(`https://tuiter.fragua.com.ar/api/v1/login`, {
       method: "POST",
       body: JSON.stringify({
         email,
@@ -23,7 +23,7 @@ app.post("/api/login", async (req: Request, res: Response) => {
       }),
       headers: {
         "Content-Type": "application/json",
-        "Application-Token": `${process.env.API_SECRET_TOKEN}`,
+        "Application-Token": `e8b244e47a8815d3bf9357cececbda60fec0e142196f72ad1782e539ccd3361e`,
       },
     });
 
@@ -38,13 +38,16 @@ app.get("/api/me/profile", async (req: Request, res: Response) => {
   const { authorization } = req.headers;
 
   try {
-    const response = await fetch(`${process.env.API_URL}/me/profile`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: authorization ?? "",
-        "Application-Token": `${process.env.API_SECRET_TOKEN}`,
-      },
-    });
+    const response = await fetch(
+      `https://tuiter.fragua.com.ar/api/v1/me/profile`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authorization ?? "",
+          "Application-Token": `e8b244e47a8815d3bf9357cececbda60fec0e142196f72ad1782e539ccd3361e`,
+        },
+      }
+    );
 
     const data = await response.json();
     res.status(response.status).send(data);
@@ -56,7 +59,7 @@ app.get("/api/me/profile", async (req: Request, res: Response) => {
 app.post("/api/users", async (req: Request, res: Response) => {
   try {
     const { email, password, name } = req.body;
-    const response = await fetch(`${process.env.API_URL}/users`, {
+    const response = await fetch(`https://tuiter.fragua.com.ar/api/v1/users`, {
       method: "POST",
       body: JSON.stringify({
         name,
@@ -65,7 +68,7 @@ app.post("/api/users", async (req: Request, res: Response) => {
       }),
       headers: {
         "Content-Type": "application/json",
-        "Application-Token": `${process.env.API_SECRET_TOKEN}`,
+        "Application-Token": `e8b244e47a8815d3bf9357cececbda60fec0e142196f72ad1782e539ccd3361e`,
       },
     });
 
@@ -82,12 +85,12 @@ app.get("/api/me/feed", async (req: Request, res: Response) => {
 
   try {
     const response = await fetch(
-      `${process.env.API_URL}/me/feed?page=${page}&only_parents=${only_parents}`,
+      `https://tuiter.fragua.com.ar/api/v1/me/feed?page=${page}&only_parents=${only_parents}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: authorization ?? "",
-          "Application-Token": `${process.env.API_SECRET_TOKEN}`,
+          "Application-Token": `e8b244e47a8815d3bf9357cececbda60fec0e142196f72ad1782e539ccd3361e`,
         },
       }
     );
@@ -107,13 +110,13 @@ app.post("/api/me/tuits/:id/likes", async (req: Request, res: Response) => {
   try {
     const { authorization } = req.headers;
     const response = await fetch(
-      `${process.env.API_URL}/me/tuits/${req.params.id}/likes`,
+      `https://tuiter.fragua.com.ar/api/v1/me/tuits/${req.params.id}/likes`,
       {
         method: "POST",
         body: JSON.stringify({}),
         headers: {
           "Content-Type": "application/json",
-          "Application-Token": `${process.env.API_SECRET_TOKEN}`,
+          "Application-Token": `e8b244e47a8815d3bf9357cececbda60fec0e142196f72ad1782e539ccd3361e`,
           Authorization: authorization ?? "",
         },
       }
@@ -132,13 +135,13 @@ app.delete("/api/me/tuits/:id/likes", async (req: Request, res: Response) => {
   try {
     const { authorization } = req.headers;
     const response = await fetch(
-      `${process.env.API_URL}/me/tuits/${req.params.id}/likes`,
+      `https://tuiter.fragua.com.ar/api/v1/me/tuits/${req.params.id}/likes`,
       {
         method: "DELETE",
         body: JSON.stringify({}),
         headers: {
           "Content-Type": "application/json",
-          "Application-Token": `${process.env.API_SECRET_TOKEN}`,
+          "Application-Token": `e8b244e47a8815d3bf9357cececbda60fec0e142196f72ad1782e539ccd3361e`,
           Authorization: authorization ?? "",
         },
       }
@@ -157,17 +160,20 @@ app.post("/api/me/tuits", async (req: Request, res: Response) => {
   try {
     const { authorization } = req.headers;
     const { message } = req.body;
-    const response = await fetch(`${process.env.API_URL}/me/tuits`, {
-      method: "POST",
-      body: JSON.stringify({
-        message,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "Application-Token": `${process.env.API_SECRET_TOKEN}`,
-        Authorization: authorization ?? "",
-      },
-    });
+    const response = await fetch(
+      `https://tuiter.fragua.com.ar/api/v1/me/tuits`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          message,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "Application-Token": `e8b244e47a8815d3bf9357cececbda60fec0e142196f72ad1782e539ccd3361e`,
+          Authorization: authorization ?? "",
+        },
+      }
+    );
     const data = await response.json();
 
     res.status(response.status).send(data);
@@ -186,19 +192,22 @@ app.put("/api/me/profile", async (req: Request, res: Response) => {
 
     if (password) passwordHash = await encryptPassword(password);
 
-    const response = await fetch(`${process.env.API_URL}/me/profile`, {
-      method: "PUT",
-      body: JSON.stringify({
-        name,
-        avatar_url,
-        ...(password && { password: passwordHash }),
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "Application-Token": `${process.env.API_SECRET_TOKEN}`,
-        Authorization: authorization ?? "",
-      },
-    });
+    const response = await fetch(
+      `https://tuiter.fragua.com.ar/api/v1/me/profile`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          name,
+          avatar_url,
+          ...(password && { password: passwordHash }),
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "Application-Token": `e8b244e47a8815d3bf9357cececbda60fec0e142196f72ad1782e539ccd3361e`,
+          Authorization: authorization ?? "",
+        },
+      }
+    );
     const data = await response.json();
 
     res.status(response.status).send(data);
@@ -213,11 +222,11 @@ app.get("/api/me/tuits/:id", async (req: Request, res: Response) => {
   try {
     const { authorization } = req.headers;
     const response = await fetch(
-      `${process.env.API_URL}/me/tuits/${req.params.id}`,
+      `https://tuiter.fragua.com.ar/api/v1/me/tuits/${req.params.id}`,
       {
         headers: {
           "Content-Type": "application/json",
-          "Application-Token": `${process.env.API_SECRET_TOKEN}`,
+          "Application-Token": `e8b244e47a8815d3bf9357cececbda60fec0e142196f72ad1782e539ccd3361e`,
           Authorization: authorization ?? "",
         },
       }
@@ -235,11 +244,11 @@ app.get("/api/me/tuits/:id/replies", async (req: Request, res: Response) => {
   try {
     const { authorization } = req.headers;
     const response = await fetch(
-      `${process.env.API_URL}/me/tuits/${req.params.id}/replies`,
+      `https://tuiter.fragua.com.ar/api/v1/me/tuits/${req.params.id}/replies`,
       {
         headers: {
           "Content-Type": "application/json",
-          "Application-Token": `${process.env.API_SECRET_TOKEN}`,
+          "Application-Token": `e8b244e47a8815d3bf9357cececbda60fec0e142196f72ad1782e539ccd3361e`,
           Authorization: authorization ?? "",
         },
       }
@@ -258,13 +267,13 @@ app.post("/api/me/tuits/:id/replies", async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     const { message } = req.body;
     const response = await fetch(
-      `${process.env.API_URL}/me/tuits/${req.params.id}/replies`,
+      `https://tuiter.fragua.com.ar/api/v1/me/tuits/${req.params.id}/replies`,
       {
         method: "POST",
         body: JSON.stringify({ message }),
         headers: {
           "Content-Type": "application/json",
-          "Application-Token": `${process.env.API_SECRET_TOKEN}`,
+          "Application-Token": `e8b244e47a8815d3bf9357cececbda60fec0e142196f72ad1782e539ccd3361e`,
           Authorization: authorization ?? "",
         },
       }
