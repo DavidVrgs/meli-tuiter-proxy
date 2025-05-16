@@ -87,9 +87,14 @@ app.get("/api/me/feed", async (req: Request, res: Response) => {
       },
     });
 
+    console.log(response);
+
     const data = await response.json();
+    console.log(data);
     res.status(response.status).send(data);
-  } catch {
+  } catch (error) {
+    console.log(error);
+
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
